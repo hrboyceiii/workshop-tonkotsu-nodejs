@@ -49,7 +49,7 @@ jobs:
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
         slot-name: 'staging'
       if: github.ref != 'master'
-    - name: Create issue using REST API
+    - name: Get deployment status
       run: |
         curl --request POST \
         --url https://api.github.com/repos/${{ github.repository }}/deployments/${{ github.workflow }}/${{ github.run_id }}/statuses \
