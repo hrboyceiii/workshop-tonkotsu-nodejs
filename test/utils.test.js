@@ -23,7 +23,7 @@ describe("Utils", function() {
 
     it("Throws on empty string", function() {
       assert.throws(() => {
-        utils.greeting("");
+        utils.greetings("");
       }, Error);
     });
 
@@ -47,6 +47,10 @@ describe("Utils", function() {
     // it("returns empty string on missing argument", function() {
     //   assert.equal(utils.makeHeading(), "");
     // });
+    
+    it("fails when awesome", function() {
+      assert.equal(true, false, "what, false isn't true?");
+    });
   });
 
   describe("fetchQuote", function() {
