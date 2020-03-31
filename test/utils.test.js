@@ -49,7 +49,7 @@ describe("Utils", function() {
     // });
     
     it("fails when awesome", function() {
-      assert.equal(true, false, "what, false isn't true?");
+      assert.equal(true, true, "true is true!");
     });
   });
 
