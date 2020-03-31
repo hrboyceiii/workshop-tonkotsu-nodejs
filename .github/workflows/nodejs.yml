@@ -49,3 +49,13 @@ jobs:
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
         slot-name: 'staging'
       if: github.ref != 'master'
+    - name: Create issue using REST API
+      run: |
+        curl --request POST \
+        --url https://api.github.com/repos/${{ github.repository }}/deployments/${{ github.workflow }}/${{ github.run_id }}/statuses \
+        --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+        --header 'content-type: application/json' \
+        --data '{
+          "title": "Automated issue for commit: ${{ github.sha }}",
+          "body": "This issue was automatically created by the GitHub Action workflow **${{ github.workflow }}**. \n\n The commit hash was: _${{ github.sha }}_."
+          }'
