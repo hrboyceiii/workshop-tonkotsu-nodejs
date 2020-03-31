@@ -52,7 +52,7 @@ jobs:
     - name: Get deployment status
       run: |
         curl --request POST \
-        --url https://api.github.com/repos/${{ github.repository }}/deployments/${{ github.workflow }}/${{ github.run_id }}/statuses \
+        --url https://api.github.com/repos/${{ github.repository }}/deployments/statuses \
         --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
         --header 'content-type: application/json' \
         --data '{
