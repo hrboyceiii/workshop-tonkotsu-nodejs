@@ -47,6 +47,10 @@ describe("Utils", function() {
     // it("returns empty string on missing argument", function() {
     //   assert.equal(utils.makeHeading(), "");
     // });
+    
+    it("fails when awesome", function() {
+      assert.equal(true, true, "true is true!");
+    });
   });
 
   describe("fetchQuote", function() {

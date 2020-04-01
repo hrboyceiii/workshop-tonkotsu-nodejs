@@ -4,10 +4,15 @@
 name: Node.js CI
 
 on:
-  push:
-    branches: [ master ]
   pull_request:
-    branches: [ master ]
+  push:
+    branches:
+    - master
+
+env:
+  AZURE_WEBAPP_NAME: 'team1webapp1234908'    # set this to your application's name
+  AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
+  NODE_VERSION: '10.x'                # set this to the node version to use
 
 jobs:
   build:
@@ -16,7 +21,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x]
+        node-version: [10.x]
 
     steps:
     - uses: actions/checkout@v2
@@ -29,3 +34,24 @@ jobs:
     - run: npm test
       env:
         CI: true
+    - name: 'Deploy to Azure WebApp'
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      if: github.ref == 'master'
+    - name: 'Deploy to Azure WebApp staging'
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_STAGING }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        slot-name: 'staging'
+      if: github.ref != 'master'
+    - name: Get deployment status
+      run: |
+        curl --request GET \
+        --url https://api.github.com/repos/${{ env.GITHUB_ACTOR }}/${{ env.GITHUB_REPOSITORY }}/deployments/${{ env.GITHUB_RUN_ID }}/ \
+        --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+        --header 'content-type: application/json'
